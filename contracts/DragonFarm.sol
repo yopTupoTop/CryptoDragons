@@ -1,41 +1,38 @@
 pragma solidity >=0.8.0;
 
 contract DragonFarm {
+
     event NewDragon(uint256 id, string name, uint256 dna);
+
     struct Dragon {
-        uint256 id;
         string name;
         uint256 dna;
         uint256 level;
     }
+
+    mapping (uint256 => address) public dragonToOwner; // stores address of user, who is owner of dragon with this id 
+    mapping (address => uint256) ownersDragonCount; // stores count of dragon from user's address
+
     Dragon[] public dragons;
 
-    mapping(uint256 => address) dragonToOwner; // storing and displaying address of owner
-    mapping(address => uint256) ownerToDragons; // storing and displaying count of dragons for owner
-
-    function generateRandomDna(string memory _name)
-        private
-        pure
-        returns (uint256)
-    {
-        uint256 randDna = uint256(keccak256(abi.encode(_name)));
-        return randDna % (10**16);
+    function _createDragon(uint256 _dna, string memory _name) internal {
+        dragons.push(Dragon(_name, _dna, 1));
+        uint256 id = dragons.length - 1;
+        dragonToOwner[id] = msg.sender;
+        ownersDragonCount[msg.sender]++;
+        emit NewDragon(id, _name, _dna);
     }
 
+    function generateRandomDna(string memory _str) public pure returns (uint256) {
+        uint256 rand = uint256(keccak256(abi.encode(_str)));
+        return rand % (10 ** 16);
+    }
+
+    // this function can be called only when user doesn't have dragons
     function createDragon(string memory _name) public {
-        uint256 dna = generateRandomDna(_name);
-        uint256 id = ownerToDragons[msg.sender]; // save address of owner
-        addDragon(id, _name, dna);
+        require(ownersDragonCount[msg.sender] == 0);
+        uint256 randDna = generateRandomDna(_name);
+        _createDragon(randDna, _name);
     }
 
-    function addDragon(
-        uint256 _id,
-        string memory _name,
-        uint256 _dna
-    ) private {
-        dragons.push(Dragon(_id, _name, _dna, 0));
-        dragonToOwner[_id] = msg.sender; // atach dragon to owner's address
-        emit NewDragon(_id, _name, _dna);
-        ownerToDragons[msg.sender]++;
-    }
 }
