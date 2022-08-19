@@ -17,21 +17,26 @@ async function main() {
   const Lock = await hre.ethers.getContractFactory("Lock");
   const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
 
-  const DRAGONFARM = await hre.ethers.getContractFactory("DragonFarm");
-  const dragonFarm = await DRAGONFARM.deploy();
+  const Dragon = await hre.ethers.getContractFactory("Dragon");
+  const dragon = await Dragon.deploy();
 
-  const DRAGONFORGE = await hre.ethers.getContractFactory("DragonForge");
-  const dragonForge = await DRAGONFORGE.deploy();
+  const DragonFactory = await hre.ethers.getContractFactory("DragonFactory");
+  const dragonFactory = await DragonFactory.deploy(dragon.address);
 
-  const DRAGONCOIN = await hre.ethers.getContractFactory("DragonCoin");
-  const dragonCoin = await DRAGONCOIN.deploy();
+  const DragonCoin = await hre.ethers.getContractFactory("DragonCoin");
+  const dragonCoin = await DragonCoin.deploy();
+
+  const DragonBattle = await hre.ethers.getContractFactory("DragonBattle");
+  const dragonBattle = await DragonBattle.deploy(dragonCoin.address);
 
   await lock.deployed();
 
   console.log("Lock with 1 ETH deployed to:", lock.address);
 
-  console.log("dragon farm deployed to:", dragonFarm.address);
-  console.log("dragon forge deployed to:", dragonForge.address);
+  console.log("dragon factory deployed to:", dragonFactory.address);
+  console.log("dragon deployed to:", dragon.address);
+  console.log("dragon coin deployed to:", dragonCoin.address);
+  console.log("dragon battle deployed to:", dragonBattle.address);
 }
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.

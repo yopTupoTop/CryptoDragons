@@ -1,7 +1,7 @@
 pragma solidity >=0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "./IDragonCoin.sol";
+import "./interfaces/IDragonCoin.sol";
 
 contract DragonCoin is IDragonCoin, ERC20 {
     
