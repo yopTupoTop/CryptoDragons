@@ -1,18 +1,18 @@
 pragma solidity >=0.8.0;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "./interfaces/IDragonFactory.sol";
 import "./interfaces/IDragon.sol";
 import "./Dragon.sol";
+import "./interfaces/IDragonFactory.sol";
 
-contract DragonFactory {
+contract DragonFactory is  IDragonFactory {
 
     event NewDragon(string name, uint256 dna);
 
   
 
     //mapping (uint256 => address) public dragonToOwner; // stores address of user, who is owner of dragon with this id 
-    mapping (address => uint256) ownersDragonCount; // stores count of dragon from user's address
+    mapping (address => uint256) public OwnersDragonCount; // stores count of dragon from user's address
 
     Dragon dragonNFT;
 
@@ -46,4 +46,7 @@ contract DragonFactory {
         _createDragon(randDna, _name);
     }
 
+    function getOwnersDragonCount(address owner) external view returns (uint256) {
+        return OwnersDragonCount[owner];
+    }
 }

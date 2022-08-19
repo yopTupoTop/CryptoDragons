@@ -8,4 +8,7 @@ interface IDragon is IERC721 {
         uint256 dna;
         uint256 level;
     }
+
+    function getOwnedDragon(address owner, uint256 tokenId) external view returns (Dragon memory);
+    function getOwnedDragonNft(uint256 tokenId) external view returns (address);
 }
