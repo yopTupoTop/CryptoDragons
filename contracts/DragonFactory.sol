@@ -14,15 +14,15 @@ contract DragonFactory is  IDragonFactory {
     //mapping (uint256 => address) public dragonToOwner; // stores address of user, who is owner of dragon with this id 
     mapping (address => uint256) public OwnersDragonCount; // stores count of dragon from user's address
 
-    Dragon dragonNFT;
+    IDragon private dragonNFT;
 
     constructor(address _dragonNFT) {
-        dragonNFT = Dragon(_dragonNFT);
+        dragonNFT = IDragon(_dragonNFT);
     }
 
     function _createDragon(uint256 _dna, string memory _name) internal {
         dragonNFT.mint(msg.sender, _name, _dna);
-        ownersDragonCount[msg.sender]++;
+        OwnersDragonCount[msg.sender]++;
         emit NewDragon(_name, _dna);
     }
 
@@ -33,7 +33,7 @@ contract DragonFactory is  IDragonFactory {
 
     // this function can be called only when user doesn't have dragons
     function createDragon(string memory _name) public {
-        require(ownersDragonCount[msg.sender] == 0);
+        require(OwnersDragonCount[msg.sender] == 0);
         uint256 randDna = generateRandomDna(_name);
         _createDragon(randDna, _name);
     }

@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 
 import "./interfaces/IDragon.sol";
 
-contract Dragon is IDragon, ERC721 {
+abstract contract Dragon is IDragon, ERC721 {
 
     using Counters for Counters.Counter;
     Counters.Counter private _counter;
@@ -17,6 +17,7 @@ contract Dragon is IDragon, ERC721 {
     //player address => token id => struct Dragon
     mapping(address => mapping(uint256 => Dragon)) public OwnedDragon;
     mapping(uint256 => address) public OwnedDragonNft;
+    mapping(address => uint256) public DragonsOwnerNft;
     
     function mint(address to, string memory name, uint256 dna) external {
         _counter.increment();
@@ -31,5 +32,9 @@ contract Dragon is IDragon, ERC721 {
 
     function getOwnedDragonNft(uint256 tokenId) external view returns (address) {
         return OwnedDragonNft[tokenId];
+    }
+
+    function getDragonsOwnerNft(address owner) external view returns (uint256) {
+        return DragonsOwnerNft[owner];
     }
 }

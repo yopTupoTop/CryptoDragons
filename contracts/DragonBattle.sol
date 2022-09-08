@@ -7,17 +7,21 @@ import "./interfaces/IDragon.sol";
 import "./Dragon.sol";
 import "./DragonFactory.sol";
 
-contract DragonBattle is IDragon, IDragonFactory {
+abstract contract DragonBattle is IDragon, IDragonFactory {
 
-    IDragonCoin dragonCoin;
+    IDragonCoin private dragonCoin;
+    IDragon private dragon;
+    IDragonFactory private dragonFactory;
 
-    constructor(address _dragonCoin) {
+    constructor(address _dragonCoin, address _dragon, address _dragonFactory) {
         dragonCoin = IDragonCoin(_dragonCoin);
+        dragon = IDragon(_dragon);
+        dragonFactory = IDragonFactory(_dragonFactory);
     }
 
      modifier onlyOwnerOfDragon(uint256 _dragonId) {
-        uint256 dragonCount = getOwnersDragonCount(msg.sender);
-        uint256 dragonId = getOwnedDragonNft(msg.sender);
+        uint256 dragonCount = dragonFactory.getOwnersDragonCount(msg.sender);
+        uint256 dragonId = dragon.getDragonsOwnerNft(msg.sender);
         require(dragonCount != 0);
         require(dragonId == _dragonId);
         _;
@@ -25,9 +29,9 @@ contract DragonBattle is IDragon, IDragonFactory {
 
     function attack(uint256 _dragonId, uint256 _targetId) external onlyOwnerOfDragon(_dragonId) {
         
-        Dragon memory myDragon = getOwnedDragon(msg.sender, _dragonId);
-        address targetAddress = getOwnedDragonNft(_targetId);
-        Dragon storage targetDragon = getOwnedDragon(targetAddress, _targetId);
+        Dragon memory myDragon = dragon.getOwnedDragon(msg.sender, _dragonId);
+        address targetAddress = dragon.getOwnedDragonNft(_targetId);
+        Dragon memory targetDragon = dragon.getOwnedDragon(targetAddress, _targetId);
 
         uint256 randResult = uint256(keccak256(abi.encode(myDragon.dna + targetDragon.dna))) % 100;
 

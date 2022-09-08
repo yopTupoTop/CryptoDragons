@@ -9,6 +9,8 @@ interface IDragon is IERC721 {
         uint256 level;
     }
 
+    function mint(address to, string memory name, uint256 dna) external;
     function getOwnedDragon(address owner, uint256 tokenId) external view returns (Dragon memory);
     function getOwnedDragonNft(uint256 tokenId) external view returns (address);
+    function getDragonsOwnerNft(address owner) external view returns (uint256);
 }
