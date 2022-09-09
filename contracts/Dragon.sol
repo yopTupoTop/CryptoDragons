@@ -23,7 +23,7 @@ abstract contract Dragon is IDragon, ERC721 {
         _counter.increment();
         _mint(to, _counter.current());
         OwnedDragonNft[_counter.current()] = to;
-        OwnedDragon[to][_counter.current()] = Dragon(name, dna, 1);
+        OwnedDragon[to][_counter.current()] = Dragon(name, dna, uint32(block.timestamp + 1 days), 1);
     }
 
     function getOwnedDragon(address owner, uint256 tokenId) external view returns (Dragon memory) {

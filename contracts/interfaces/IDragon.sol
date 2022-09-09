@@ -6,7 +6,8 @@ interface IDragon is IERC721 {
     struct Dragon {
         string name;
         uint256 dna;
-        uint256 level;
+        uint32 level;
+        uint32 readyTime;
     }
 
     function mint(address to, string memory name, uint256 dna) external;

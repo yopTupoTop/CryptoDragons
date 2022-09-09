@@ -27,6 +27,10 @@ abstract contract DragonBattle is IDragon, IDragonFactory {
         _;
     }
 
+    function triggerCollDown(Dragon memory _dragon) internal view {
+        _dragon.readyTime = uint32(block.timestamp + 1 days);
+    }
+
     function attack(uint256 _dragonId, uint256 _targetId) external onlyOwnerOfDragon(_dragonId) {
         
         Dragon memory myDragon = dragon.getOwnedDragon(msg.sender, _dragonId);
@@ -42,5 +46,7 @@ abstract contract DragonBattle is IDragon, IDragonFactory {
             targetDragon.level++;
             dragonCoin.mint(targetAddress, 10);
         }
+
+        triggerCollDown(myDragon);
     }
 }
