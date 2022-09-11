@@ -27,7 +27,7 @@ abstract contract DragonBattle is IDragon, IDragonFactory {
         _;
     }
 
-    function triggerCollDown(Dragon memory _dragon) internal view {
+    function triggerCoolDown(Dragon memory _dragon) internal view {
         _dragon.readyTime = uint32(block.timestamp + 1 days);
     }
 
@@ -47,6 +47,6 @@ abstract contract DragonBattle is IDragon, IDragonFactory {
             dragonCoin.mint(targetAddress, 10);
         }
 
-        triggerCollDown(myDragon);
+        triggerCoolDown(myDragon);
     }
 }
