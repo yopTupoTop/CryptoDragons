@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 
 import "./interfaces/IDragon.sol";
 
-abstract contract Dragon is IDragon, ERC721 {
+contract Dragon is IDragon, ERC721 {
 
     using Counters for Counters.Counter;
     Counters.Counter private _counter;

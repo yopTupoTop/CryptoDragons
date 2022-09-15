@@ -17,15 +17,6 @@ async function main() {
   const Lock = await hre.ethers.getContractFactory("Lock");
   const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
 
-  const IDragon = await hre.ethers.getContractFactory("IDragon");
-  const iDragon = await IDragon.deploy();
-
-  const IDragonFactory = await hre.ethers.getContractFactory("IDragonFactory");
-  const iDragonFactory = await IDragonFactory.deploy();
-
-  const IDragonCoin = await hre.ethers.getContractFactory("IDragonCoin");
-  const iDragonCoin = await IDragonCoin.deploy();
-
   const Dragon = await hre.ethers.getContractFactory("Dragon");
   const dragon = await Dragon.deploy();
 
@@ -36,7 +27,7 @@ async function main() {
   const dragonCoin = await DragonCoin.deploy();
 
   const DragonBattle = await hre.ethers.getContractFactory("DragonBattle");
-  const dragonBattle = await DragonBattle.deploy(iDragonCoin.address, iDragon.address, iDragonFactory.address);
+  const dragonBattle = await DragonBattle.deploy(DragonCoin.address, Dragon.address, DragonFactory.address);
 
   await lock.deployed();
 
