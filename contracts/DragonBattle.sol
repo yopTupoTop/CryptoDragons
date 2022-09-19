@@ -31,6 +31,10 @@ abstract contract DragonBattle is IDragon, IDragonFactory {
         _dragon.readyTime = uint32(block.timestamp + 1 days);
     }
 
+    function levelUp(address owner, uint256 dragonId) internal view {
+        dragon.getOwnedDragon(owner, dragonId).level++;
+    }
+
     function attack(uint256 _dragonId, uint256 _targetId) external onlyOwnerOfDragon(_dragonId) {
         
         Dragon memory myDragon = dragon.getOwnedDragon(msg.sender, _dragonId);
@@ -40,10 +44,10 @@ abstract contract DragonBattle is IDragon, IDragonFactory {
         uint256 randResult = uint256(keccak256(abi.encode(myDragon.dna + targetDragon.dna))) % 100;
 
         if (randResult <= 60) {
-            myDragon.level++;
+            levelUp(msg.sender, _dragonId);
             dragonCoin.mint(msg.sender, 10);
         } else {
-            targetDragon.level++;
+            levelUp(targetAddress, _targetId);
             dragonCoin.mint(targetAddress, 10);
         }
 
