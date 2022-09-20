@@ -9,7 +9,6 @@ abstract contract DragonFactory is  IDragonFactory {
 
     event NewDragon(string name, uint256 dna);
 
-    //mapping (uint256 => address) public dragonToOwner 
     mapping (address => uint256) public OwnersDragonCount; // stores count of dragon from user's address
 
     IDragon private dragonNFT;
@@ -31,19 +30,20 @@ abstract contract DragonFactory is  IDragonFactory {
 
     // this function can be called only when user doesn't have dragons
     function createDragon(string calldata _name) external {
-        require(OwnersDragonCount[msg.sender] == 0);
+        require(OwnersDragonCount[msg.sender] == 0, "You already have a dragon");
         uint256 randDna = generateRandomDna(_name);
         _createDragon(randDna, _name);
     }
 
     //this function allows create new dragons if you also have one 
     function payAndMultiply(string memory _name) external payable {
-        require(msg.value > 0, "pay to multiply");
+        require(msg.value > 0, "Pay to multiply");
         string memory newStr = Strings.toString(msg.value);
         uint256 randDna = generateRandomDna(newStr);
         _createDragon(randDna, _name);
     }
 
+    //function to get count of dragons the user has 
     function getOwnersDragonCount(address owner) external view returns (uint256) {
         return OwnersDragonCount[owner];
     }

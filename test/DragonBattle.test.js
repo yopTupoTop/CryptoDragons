@@ -35,14 +35,16 @@ describe ("Dragon Battle test", function() {
     });
 
     it("dragon should be able to attack", async function () {
+        const blockNumBefore = await ethers.provider.getBlockNumber();
+        const blockBefore = await ethers.provider.getBlock(blockNumBefore);
+        const timestampBefore = blockBefore.timestamp;
         let result;
         result = await factory.createDragon(dragonNames[0], {from: address1});
-        const firstDragonId = await dragon.getDragonsOwnerNft(address1);
-        result = await factory.createDragon(dragonNames[1], {from: address2});
-        const secondDragonId = await dragon.getDragonsOwnerNft(address2);
+        const dragonId = await dragon.getDragonsOwnerNft(address1);
         await time.increase(time.duration.days(1));
-        await battle.attack(firstDragonId, secondDragonId, {from: address1});
-        expect (result.receipt.status).to.equal(true);
+        let currentDragon = dragon.getOwnedDragon(address1, dragonId);
+        let readiness = currentDragon.readyTime;
+        expect(readiness <= timestampBefore).to.equal(true); 
     });
     
 });
